@@ -121,23 +121,23 @@ export default function LovePage() {
           >
             <p>
               Behind every line of code, every model trained, and every bug fixed at 3 AM,
-              there's a family that never asked me to choose between my dreams and their expectations.
+              there&apos;s a family that never asked me to choose between my dreams and their expectations.
             </p>
 
             <div className="space-y-2">
               <p>
-                To <span className="font-bold text-[#5d4037]">Mom</span>, who learned what "machine learning" meant just to ask about my day.
+                To <span className="font-bold text-[#5d4037]">Mom</span>, who learned what &quot;machine learning&quot; meant just to ask about my day.
               </p>
               <p>
                 To <span className="font-bold text-[#5d4037]">Dad</span>, who believed in paths he never walked himself.
               </p>
               <p>
-                To <span className="font-bold text-[#5d4037]">everyone</span> who made sacrifices I'll spend my life trying to repay.
+                To <span className="font-bold text-[#5d4037]">everyone</span> who made sacrifices I&apos;ll spend my life trying to repay.
               </p>
             </div>
 
             <p className="font-['Caveat'] text-2xl text-[#5d4037] pt-4 italic">
-              This portfolio isn't just mine—it's ours.
+              This portfolio isn&apos;t just mine—it&apos;s ours.
             </p>
           </motion.div>
 
