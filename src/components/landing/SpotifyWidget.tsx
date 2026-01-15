@@ -6,41 +6,37 @@ import React from 'react';
 import { SiSpotify } from '@icons-pack/react-simple-icons';
 import { useSpotify } from '@/hooks/use-spotify';
 
-// Replace with your Discord User ID
-// To get it: Discord Settings → Advanced → Developer Mode → Right-click your name → Copy User ID
-const DISCORD_ID = '1288864021025525840';
-
 export default function SpotifyWidget() {
-  const { spotify, isPlaying, loading } = useSpotify(DISCORD_ID);
+  const { track, isPlaying, loading } = useSpotify();
 
   // Fallback when not playing
   const fallbackTrack = {
     title: 'Not Playing',
-    artist: 'Connect Spotify to Discord',
+    artist: 'Connect your Spotify account',
     album: 'Spotify',
     albumArt: '',
     url: '#',
   };
 
-  const track = spotify
+  const displayTrack = track
     ? {
-        title: spotify.song,
-        artist: spotify.artist,
-        album: spotify.album,
-        albumArt: spotify.album_art_url,
-        url: `https://open.spotify.com/track/${spotify.track_id}`,
-      }
+      title: track.name,
+      artist: track.artist,
+      album: track.album,
+      albumArt: track.albumArt,
+      url: track.url,
+    }
     : fallbackTrack;
 
   return (
     <section className="py-8 relative">
       <div id="spotify-widget" className="relative">
         <a
-          href={track.url}
+          href={displayTrack.url}
           target="_blank"
           rel="noopener noreferrer"
           data-perch
-          className="block rounded-2xl border border-white/15 bg-zinc-950/15 backdrop-blur-md p-6 transition-all duration-300 hover:bg-zinc-950/30 hover:border-white/30 group"
+          className="block rounded-2xl border border-white/15 bg-theme-subtle p-6 transition-all duration-300 hover:bg-gray-100 dark:hover:bg-zinc-950/30 border-theme-hover group"
         >
           <div className="flex items-center gap-4">
             {/* Animated Visualizer - only show when playing */}
@@ -54,10 +50,10 @@ export default function SpotifyWidget() {
 
             {/* Album Art */}
             <div className="relative w-14 h-14 rounded-md overflow-hidden bg-muted flex-shrink-0">
-              {track.albumArt ? (
+              {displayTrack.albumArt ? (
                 <Image
-                  src={track.albumArt}
-                  alt={track.album}
+                  src={displayTrack.albumArt}
+                  alt={displayTrack.album}
                   width={56}
                   height={56}
                   className="w-full h-full object-cover"
@@ -78,9 +74,9 @@ export default function SpotifyWidget() {
                 </span>
               </div>
               <p className="text-sm font-semibold text-foreground truncate mb-0.5">
-                {track.title}
+                {displayTrack.title}
               </p>
-              <p className="text-xs text-muted-foreground truncate">{track.artist}</p>
+              <p className="text-xs text-muted-foreground truncate">{displayTrack.artist}</p>
             </div>
 
             {/* Play Button */}

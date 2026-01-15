@@ -6,12 +6,13 @@ import { dailyPapers } from '@/config/PaperTail';
 import { Link } from 'next-view-transitions';
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
-import React from 'react';
+import React, { use } from 'react';
 import ArrowLeft from '@/components/svgs/ArrowLeft';
 import Calender from '@/components/svgs/Calender';
 
-export default function PaperDetailPage({ params }: { params: { id: string } }) {
-  const paper = dailyPapers.find((p) => p.id === params.id);
+export default function PaperDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = use(params);
+  const paper = dailyPapers.find((p) => p.id === id);
 
   if (!paper) {
     notFound();

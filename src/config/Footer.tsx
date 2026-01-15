@@ -5,15 +5,15 @@ export const footerConfig = {
   links: [
     {
       name: 'GitHub',
-      href: 'https://github.com/ramxcodes',
+      href: 'https://github.com/darshanxdevs',
     },
     {
       name: 'LinkedIn',
-      href: 'https://linkedin.com/in/ramxcodes',
+      href: 'https://www.linkedin.com/in/darshanxdevs/',
     },
     {
-      name: 'HuggingFace',
-      href: 'https://huggingface.co/ramxcodes',
+      name: 'Medium',
+      href: 'https://medium.com/@darshanmistaridz',
     },
   ],
 };

@@ -33,7 +33,7 @@ export default function Publications() {
           {publications.map((pub, index) => (
             <div
               key={index}
-              className="rounded-xl border border-white/10 bg-zinc-950/40 backdrop-blur-md p-5 transition-all hover:bg-zinc-950/60 hover:border-white/20"
+              className="rounded-xl border border-theme bg-theme-card transition-all bg-theme-card-hover border-theme-hover p-5"
             >
               <div className="space-y-3">
                 <div className="flex items-start justify-between gap-4">
@@ -45,8 +45,8 @@ export default function Publications() {
                       <span className="font-bold">{pub.conference}</span> • {pub.year} •{' '}
                       <span
                         className={`inline-block px-2 py-0.5 rounded text-[10px] font-medium ${pub.status === 'Accepted'
-                            ? 'bg-green-500/10 text-green-600 dark:text-green-400'
-                            : 'bg-yellow-500/10 text-yellow-600 dark:text-yellow-400'
+                          ? 'bg-green-500/10 text-green-600 dark:text-green-400'
+                          : 'bg-yellow-500/10 text-yellow-600 dark:text-yellow-400'
                           }`}
                       >
                         {pub.status}
@@ -59,7 +59,7 @@ export default function Publications() {
                   {pub.tags.map((tag, idx) => (
                     <span
                       key={idx}
-                      className="text-[10px] px-2 py-0.5 rounded bg-zinc-900/60 backdrop-blur-sm text-muted-foreground border border-white/10"
+                      className="text-[10px] px-2 py-0.5 rounded bg-theme-accent text-theme-muted border border-theme"
                     >
                       {tag}
                     </span>
@@ -71,7 +71,7 @@ export default function Publications() {
                     {pub.technologies.map((tech, idx) => (
                       <div
                         key={idx}
-                        className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-zinc-950/60 backdrop-blur-sm border border-white/10"
+                        className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-theme-accent border border-theme"
                       >
                         <Image
                           src={tech.icon}
@@ -80,7 +80,7 @@ export default function Publications() {
                           height={16}
                           className="flex-shrink-0"
                         />
-                        <span className="text-[10px] font-mono text-zinc-300">{tech.name}</span>
+                        <span className="text-[10px] font-mono text-theme-muted">{tech.name}</span>
                       </div>
                     ))}
                   </div>

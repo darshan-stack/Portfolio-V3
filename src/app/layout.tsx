@@ -1,18 +1,18 @@
 import UmamiAnalytics from '@/components/analytics/UmamiAnalytics';
 import ChatBubble from '@/components/common/ChatBubble';
+import { FloatingDockDemo } from '@/components/common/FloatingDockDemo';
 import FloatingStickers from '@/components/common/FloatingStickers';
 import Footer from '@/components/common/Footer';
 import MagicPortal from '@/components/common/MagicPortal';
 import Navbar from '@/components/common/Navbar';
 import OnekoCat from '@/components/common/OnekoCat';
-import { Quote } from '@/components/common/Quote';
 import VisitorCounter from '@/components/common/VisitorCounter';
 import WisdomQuote from '@/components/common/WisdomQuote';
 import { ThemeProvider } from '@/components/common/ThemeProviders';
 import { generateMetadata as getMetadata } from '@/config/Meta';
 import ReactLenis from 'lenis/react';
 import { ViewTransitions } from 'next-view-transitions';
-import { Geist_Mono, Newsreader, Caveat } from 'next/font/google';
+import { Geist_Mono, Newsreader, Caveat, Orbitron } from 'next/font/google';
 
 import './globals.css';
 
@@ -35,6 +35,12 @@ const caveat = Caveat({
   variable: '--font-caveat',
 });
 
+const orbitron = Orbitron({
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '700', '800', '900'],
+  variable: '--font-orbitron',
+});
+
 export const metadata = getMetadata('/');
 
 export default function RootLayout({
@@ -45,7 +51,7 @@ export default function RootLayout({
   return (
     <ViewTransitions>
       <html lang="en" suppressHydrationWarning className="overflow-x-hidden">
-        <body className={`${geistMono.variable} ${newsreader.variable} ${caveat.variable} font-mono antialiased text-sm overflow-x-hidden w-full`}>
+        <body className={`${geistMono.variable} ${newsreader.variable} ${caveat.variable} ${orbitron.variable} font-mono antialiased text-sm overflow-x-hidden w-full`}>
           <ThemeProvider
             attribute="class"
             defaultTheme="system"
@@ -60,9 +66,9 @@ export default function RootLayout({
                   <Navbar />
                   {children}
                   <OnekoCat />
-                  <Quote />
                   <Footer />
                   <ChatBubble />
+                  <FloatingDockDemo />
                   <VisitorCounter />
                   <WisdomQuote />
                   <UmamiAnalytics />

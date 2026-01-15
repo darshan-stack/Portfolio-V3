@@ -1,5 +1,4 @@
 import { systemPrompt } from '@/config/ChatPrompt';
-import { createParser } from 'eventsource-parser';
 import { NextRequest, NextResponse } from 'next/server';
 import * as z from 'zod';
 
@@ -128,11 +127,18 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const apiKey = process.env.GEMINI_API_KEY;
+    const apiKey = process.env.OPENAI_API_KEY;
+    console.log('Environment check:', {
+      hasApiKey: !!apiKey,
+      apiKeyPrefix: apiKey ? apiKey.substring(0, 15) + '...' : 'undefined',
+      nodeEnv: process.env.NODE_ENV,
+    });
+
     if (!apiKey) {
-      console.error('GEMINI_API_KEY not configured');
+      console.error('OPENAI_API_KEY not configured');
+      console.error('Available env vars:', Object.keys(process.env).filter(k => k.includes('OPEN')));
       return NextResponse.json(
-        { error: 'AI service not configured' },
+        { error: 'AI service not configured. Please check server logs.' },
         { status: 500 },
       );
     }
@@ -140,76 +146,76 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const validatedData = chatSchema.parse(body);
 
-    // Prepare the request body for Gemini REST API
-    const requestBody = {
-      contents: [
-        {
-          parts: [{ text: systemPrompt }],
-          role: 'user',
-        },
-        {
-          parts: [
-            { text: 'I understand. I will act as your portfolio assistant.' },
-          ],
-          role: 'model',
-        },
-        // Add conversation history
-        ...validatedData.history.map((msg) => ({
-          ...msg,
-          parts: msg.parts.map((part) => ({
-            ...part,
-            text: msg.role === 'user' ? sanitizeInput(part.text) : part.text,
-          })),
-        })),
-        // Add current message
-        {
-          parts: [{ text: sanitizeInput(validatedData.message) }],
-          role: 'user',
-        },
-      ],
-      generationConfig: {
-        maxOutputTokens: 512,
-        temperature: 0.7,
-        topP: 0.8,
-        topK: 40,
+    // Prepare messages for OpenAI API
+    const messages = [
+      {
+        role: 'system',
+        content: systemPrompt,
       },
-    };
+      // Add conversation history
+      ...validatedData.history.map((msg) => ({
+        role: msg.role === 'model' ? 'assistant' : msg.role,
+        content: msg.parts.map(p => p.text).join('\n'),
+      })),
+      // Add current message
+      {
+        role: 'user',
+        content: sanitizeInput(validatedData.message),
+      },
+    ];
 
-    const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-exp:streamGenerateContent?alt=sse&key=${apiKey}`;
+    const openAIUrl = 'https://api.openai.com/v1/chat/completions';
 
-    const response = await fetch(geminiUrl, {
+    const response = await fetch(openAIUrl, {
       method: 'POST',
       headers: {
+        'Authorization': `Bearer ${apiKey}`,
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(requestBody),
+      body: JSON.stringify({
+        model: 'gpt-3.5-turbo',
+        messages: messages,
+        stream: true,
+        max_tokens: 512,
+        temperature: 0.7,
+      }),
+    });
+
+    console.log('OpenAI request sent:', {
+      model: 'gpt-3.5-turbo',
+      messageCount: messages.length,
+      stream: true,
     });
 
     if (!response.ok) {
-      throw new Error(`Gemini API error: ${response.status}`);
+      const errorText = await response.text();
+      console.error('OpenAI API error:', {
+        status: response.status,
+        statusText: response.statusText,
+        error: errorText,
+      });
+
+      let errorMessage = 'AI service error';
+      try {
+        const errorJson = JSON.parse(errorText);
+        errorMessage = errorJson.error?.message || errorJson.message || errorMessage;
+      } catch (e) {
+        // Error text is not JSON
+      }
+
+      return NextResponse.json(
+        { error: `${errorMessage} (Status: ${response.status})` },
+        { status: response.status },
+      );
     }
+
+    console.log('OpenAI response OK, starting stream...');
 
     const encoder = new TextEncoder();
 
     const stream = new ReadableStream({
       async start(controller) {
         try {
-          const parser = createParser({
-            onEvent: (event) => {
-              try {
-                const data = JSON.parse(event.data);
-                const text = data?.candidates?.[0]?.content?.parts?.[0]?.text;
-                if (text) {
-                  // Send as Server-Sent Event format
-                  const sseData = `data: ${JSON.stringify({ text })}\n\n`;
-                  controller.enqueue(encoder.encode(sseData));
-                }
-              } catch (parseError) {
-                console.error('Parse error:', parseError);
-              }
-            },
-          });
-
           if (!response.body) {
             throw new Error('No response body');
           }
@@ -221,10 +227,33 @@ export async function POST(request: NextRequest) {
             const { done, value } = await reader.read();
             if (done) break;
 
-            parser.feed(decoder.decode(value));
+            const chunk = decoder.decode(value);
+            const lines = chunk.split('\n').filter(line => line.trim() !== '');
+
+            for (const line of lines) {
+              if (line.startsWith('data: ')) {
+                const data = line.slice(6);
+
+                if (data === '[DONE]') {
+                  controller.enqueue(encoder.encode('data: {"done": true}\n\n'));
+                  continue;
+                }
+
+                try {
+                  const parsed = JSON.parse(data);
+                  const text = parsed.choices?.[0]?.delta?.content;
+
+                  if (text) {
+                    const sseData = `data: ${JSON.stringify({ text })}\n\n`;
+                    controller.enqueue(encoder.encode(sseData));
+                  }
+                } catch (parseError) {
+                  console.error('Parse error:', parseError);
+                }
+              }
+            }
           }
 
-          // Send completion signal
           controller.enqueue(encoder.encode('data: {"done": true}\n\n'));
           controller.close();
         } catch (error) {

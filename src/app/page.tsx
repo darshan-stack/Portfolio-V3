@@ -1,5 +1,6 @@
 import Container from '@/components/common/Container';
 import { SectionSticker } from '@/components/common/FloatingStickers';
+import { ParallaxSection } from '@/components/common/ScrollBackground';
 import About from '@/components/landing/About';
 import Blog from '@/components/landing/Blog';
 import PaperTail from '@/components/landing/PaperTail';
@@ -21,7 +22,9 @@ export default function Page() {
   return (
     <>
       <Container className="min-h-screen py-16">
-        <Hero />
+        <ParallaxSection>
+          <Hero />
+        </ParallaxSection>
 
         <div className="relative">
           <SpotifyWidget />
@@ -43,27 +46,37 @@ export default function Page() {
           <SectionSticker src="/stickers/sticker-5.gif" alt="Open Source Sticker" direction="left" />
         </div>
 
-        <div className="relative">
-          <CategorizedSkills />
-          <SectionSticker src="/stickers/sticker-6.gif" alt="Skills Sticker" direction="right" />
-        </div>
+        <ParallaxSection className="py-16">
+          <div className="relative">
+            <CategorizedSkills />
+            <SectionSticker src="/stickers/sticker-6.gif" alt="Skills Sticker" direction="right" />
+          </div>
+        </ParallaxSection>
 
-        <div className="relative">
-          <Experience />
-          <SectionSticker src="/stickers/sticker-1.gif" alt="Experience Sticker" direction="left" />
-        </div>
+        <ParallaxSection className="py-16">
+          <div className="relative">
+            <Experience />
+            <SectionSticker src="/stickers/sticker-1.gif" alt="Experience Sticker" direction="left" />
+          </div>
+        </ParallaxSection>
 
-        <Work />
+        <ParallaxSection className="py-16">
+          <Work />
+        </ParallaxSection>
 
-        <div className="relative">
-          <About />
-          <SectionSticker src="/stickers/sticker-3.gif" alt="About Sticker" direction="left" />
-        </div>
+        <ParallaxSection className="py-16">
+          <div className="relative">
+            <About />
+            <SectionSticker src="/stickers/sticker-3.gif" alt="About Sticker" direction="left" />
+          </div>
+        </ParallaxSection>
 
-        <div className="relative">
-          <Github />
-          <SectionSticker src="/stickers/sticker-4.gif" alt="Github Sticker" direction="right" />
-        </div>
+        <ParallaxSection className="py-16">
+          <div className="relative">
+            <Github />
+            <SectionSticker src="/stickers/sticker-4.gif" alt="Github Sticker" direction="right" />
+          </div>
+        </ParallaxSection>
 
         <div className="relative">
           <Blog />

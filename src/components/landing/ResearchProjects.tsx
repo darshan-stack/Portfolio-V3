@@ -1,5 +1,6 @@
 'use client';
 
+import { CardSpotlight } from '@/components/ui/card-spotlight';
 import { ExternalLink, Github } from 'lucide-react';
 import Image from 'next/image';
 import React from 'react';
@@ -57,33 +58,35 @@ export default function ResearchProjects() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
           {projects.map((project, index) => (
-            <div
+            <CardSpotlight
               key={index}
-              className="rounded-xl border border-white/10 bg-zinc-950/40 backdrop-blur-md p-4 transition-all hover:bg-zinc-950/60 hover:border-white/20"
+              className="p-4"
+              radius={300}
+              color="#1e40af"
             >
               <div className="space-y-3">
                 <div>
-                  <h3 className="font-bold text-base mb-1.5">{project.title}</h3>
+                  <h3 className="font-bold text-base mb-1.5 text-white dark:text-white">{project.title}</h3>
                   {project.novelty && (
-                    <p className="text-xs text-foreground/80 font-bold mb-2">
-                      <span className="text-muted-foreground">Novel:</span> {project.novelty}
+                    <p className="text-xs font-bold mb-2 text-white dark:text-white">
+                      <span className="text-gray-300 dark:text-gray-400">Novel:</span> {project.novelty}
                     </p>
                   )}
                 </div>
 
-                <p className="text-sm text-muted-foreground leading-relaxed">
+                <p className="text-sm leading-relaxed text-white dark:text-white">
                   {project.description}
                 </p>
 
                 {project.impact && (
-                  <p className="text-sm font-bold text-foreground">{project.impact}</p>
+                  <p className="text-sm font-bold text-white dark:text-white">{project.impact}</p>
                 )}
 
                 <div className="flex flex-wrap gap-1">
                   {project.tags.map((tag, idx) => (
                     <span
                       key={idx}
-                      className="text-xs font-bold px-2 py-1 rounded bg-zinc-900/60 backdrop-blur-sm text-muted-foreground border border-white/10"
+                      className="text-xs font-bold px-2 py-1 rounded bg-theme-accent text-theme-muted border border-theme"
                     >
                       {tag}
                     </span>
@@ -95,7 +98,7 @@ export default function ResearchProjects() {
                     {project.technologies.map((tech, idx) => (
                       <div
                         key={idx}
-                        className="flex items-center gap-1.5 px-2 py-1 rounded-full bg-zinc-950/60 backdrop-blur-sm border border-white/10"
+                        className="flex items-center gap-1.5 px-2 py-1 rounded-full bg-theme-accent border border-theme"
                       >
                         <Image
                           src={tech.icon}
@@ -104,7 +107,7 @@ export default function ResearchProjects() {
                           height={14}
                           className="flex-shrink-0"
                         />
-                        <span className="text-[10px] font-mono text-zinc-300">{tech.name}</span>
+                        <span className="text-[10px] font-mono text-theme-muted">{tech.name}</span>
                       </div>
                     ))}
                   </div>
@@ -116,7 +119,7 @@ export default function ResearchProjects() {
                       href={project.github}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-[10px] px-2 py-1 rounded border border-white/10 bg-zinc-950/40 backdrop-blur-sm hover:bg-zinc-950/60 hover:border-white/20 transition-all flex items-center gap-1"
+                      className="text-[10px] px-2 py-1 rounded border border-theme bg-theme-subtle hover:bg-gray-200 dark:hover:bg-zinc-800 border-theme-hover transition-all flex items-center gap-1 text-theme-primary"
                     >
                       <Github className="w-3 h-3" />
                       Code
@@ -127,7 +130,7 @@ export default function ResearchProjects() {
                       href={project.demo}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-[10px] px-2 py-1 rounded border border-white/10 bg-zinc-950/40 backdrop-blur-sm hover:bg-zinc-950/60 hover:border-white/20 transition-all flex items-center gap-1"
+                      className="text-[10px] px-2 py-1 rounded border border-theme bg-theme-subtle hover:bg-gray-200 dark:hover:bg-zinc-800 border-theme-hover transition-all flex items-center gap-1 text-theme-primary"
                     >
                       <ExternalLink className="w-3 h-3" />
                       Demo
@@ -135,7 +138,7 @@ export default function ResearchProjects() {
                   )}
                 </div>
               </div>
-            </div>
+            </CardSpotlight>
           ))}
         </div>
       </div>

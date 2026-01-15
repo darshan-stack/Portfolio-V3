@@ -10,6 +10,7 @@
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
   --font-serif: var(--font-newsreader);
+  --font-orbitron: var(--font-orbitron);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -119,14 +120,21 @@
   * {
     @apply border-border outline-ring/50;
   }
+
   body {
     @apply bg-background text-foreground;
     font-family: 'Geist Mono', monospace;
-    font-size: 14px; /* text-sm */
+    font-size: 14px;
+    /* text-sm */
   }
-  
+
   /* Apply Newsreader serif to all headings */
-  h1, h2, h3, h4, h5, h6 {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     font-family: 'Newsreader', serif;
     font-weight: 400;
   }
@@ -159,6 +167,49 @@
   @apply text-[#909092] dark:text-[#909092];
 }
 
+/* Theme-aware text colors for better contrast */
+.text-theme-primary {
+  @apply text-gray-900 dark:text-white;
+}
+
+.text-theme-secondary {
+  @apply text-gray-700 dark:text-gray-300;
+}
+
+.text-theme-muted {
+  @apply text-gray-600 dark:text-gray-400;
+}
+
+.text-theme-subtle {
+  @apply text-gray-500 dark:text-gray-500;
+}
+
+/* Theme-aware background colors */
+.bg-theme-card {
+  @apply bg-white/80 dark:bg-zinc-950/40 backdrop-blur-md;
+}
+
+.bg-theme-card-hover {
+  @apply hover:bg-white/95 dark:hover:bg-zinc-950/60;
+}
+
+.bg-theme-accent {
+  @apply bg-gray-100 dark:bg-zinc-900/60;
+}
+
+.bg-theme-subtle {
+  @apply bg-gray-50 dark:bg-zinc-950/15;
+}
+
+/* Theme-aware borders */
+.border-theme {
+  @apply border-gray-200 dark:border-white/10;
+}
+
+.border-theme-hover {
+  @apply hover:border-gray-300 dark:hover:border-white/20;
+}
+
 .font-hanken-grotesk {
   font-family: var(--font-crimson-pro), serif;
 }
@@ -183,6 +234,7 @@
     opacity: 0.2;
     filter: blur(5px);
   }
+
   100% {
     opacity: 1;
     filter: blur(0px);
@@ -198,10 +250,13 @@
 
 /* Avatar glow animation */
 @keyframes avatarGlow {
-  0%, 100% {
+
+  0%,
+  100% {
     opacity: 0.4;
     transform: scale(1) rotate(0deg);
   }
+
   50% {
     opacity: 0.6;
     transform: scale(1.05) rotate(180deg);
@@ -214,10 +269,13 @@
 
 /* Floating tech icons animations */
 @keyframes floatSlow {
-  0%, 100% {
+
+  0%,
+  100% {
     transform: translateY(0px);
     opacity: 0.8;
   }
+
   50% {
     transform: translateY(-20px);
     opacity: 1;
@@ -225,10 +283,13 @@
 }
 
 @keyframes floatMedium {
-  0%, 100% {
+
+  0%,
+  100% {
     transform: translateY(0px) rotate(0deg);
     opacity: 0.8;
   }
+
   50% {
     transform: translateY(-15px) rotate(5deg);
     opacity: 1;
@@ -236,10 +297,13 @@
 }
 
 @keyframes floatFast {
-  0%, 100% {
+
+  0%,
+  100% {
     transform: translateY(0px) scale(1);
     opacity: 0.8;
   }
+
   50% {
     transform: translateY(-10px) scale(1.05);
     opacity: 1;
@@ -354,18 +418,39 @@
 
 /* Spotify Music Bar Animations */
 @keyframes music-bar {
-  0%, 100% { height: 60%; }
-  50% { height: 20%; }
+
+  0%,
+  100% {
+    height: 60%;
+  }
+
+  50% {
+    height: 20%;
+  }
 }
 
 @keyframes music-bar-2 {
-  0%, 100% { height: 40%; }
-  50% { height: 80%; }
+
+  0%,
+  100% {
+    height: 40%;
+  }
+
+  50% {
+    height: 80%;
+  }
 }
 
 @keyframes music-bar-3 {
-  0%, 100% { height: 80%; }
-  50% { height: 30%; }
+
+  0%,
+  100% {
+    height: 80%;
+  }
+
+  50% {
+    height: 30%;
+  }
 }
 
 .animate-music-bar-1 {
@@ -386,6 +471,7 @@
     opacity: 0;
     transform: translateY(20px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);

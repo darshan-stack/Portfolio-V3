@@ -28,24 +28,31 @@ interface Message {
   isStreaming?: boolean;
 }
 
-const initialMessages: Message[] = [
-  {
-    id: 1,
-    text: "Hello! I'm Ram's Portfolio Assistant. How can I help you?",
-    sender: 'bot',
-    timestamp: new Date().toLocaleTimeString([], {
-      hour: '2-digit',
-      minute: '2-digit',
-    }),
-  },
-];
-
 const ChatBubble: React.FC = () => {
-  const [messages, setMessages] = useState<Message[]>(initialMessages);
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [isInitialized, setIsInitialized] = useState(false);
   const [newMessage, setNewMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const { triggerHaptic, isMobile } = useHapticFeedback();
+
+  // Initialize messages on client side only to prevent hydration mismatch
+  useEffect(() => {
+    if (!isInitialized) {
+      setMessages([
+        {
+          id: 1,
+          text: "Hello! I'm Ram's Portfolio Assistant. How can I help you?",
+          sender: 'bot',
+          timestamp: new Date().toLocaleTimeString([], {
+            hour: '2-digit',
+            minute: '2-digit',
+          }),
+        },
+      ]);
+      setIsInitialized(true);
+    }
+  }, [isInitialized]);
 
   // Auto-scroll to bottom when new messages are added
   useEffect(() => {
@@ -168,7 +175,9 @@ const ChatBubble: React.FC = () => {
       });
 
       if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+        const errorData = await response.json().catch(() => ({ error: 'Unknown error' }));
+        console.error('Chat API Error:', errorData);
+        throw new Error(errorData.error || `HTTP error! status: ${response.status}`);
       }
 
       const reader = response.body?.getReader();
@@ -234,10 +243,10 @@ const ChatBubble: React.FC = () => {
         prev.map((msg) =>
           msg.id === botMessageId
             ? {
-                ...msg,
-                text: "I'm sorry, I'm having trouble responding right now. Please try again later.",
-                isStreaming: false,
-              }
+              ...msg,
+              text: "I'm sorry, I'm having trouble responding right now. Please try again later.",
+              isStreaming: false,
+            }
             : msg,
         ),
       );
@@ -250,7 +259,7 @@ const ChatBubble: React.FC = () => {
   return (
     <ExpandableChat
       className="mt-4 ml-4 max-h-[95vh] max-w-[calc(100vw-2rem)] hover:cursor-pointer sm:max-w-[calc(100vw-4rem)] md:max-w-xl"
-      position="bottom-right"
+      position="bottom-left"
       size="lg"
       icon={<ChatBubbleIcon className="h-6 w-6" />}
     >

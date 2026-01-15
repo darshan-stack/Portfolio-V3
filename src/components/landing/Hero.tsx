@@ -10,7 +10,10 @@ import Skill from '../common/Skill';
 import CV from '../svgs/CV';
 import Chat from '../svgs/Chat';
 import { Button } from '../ui/button';
+import { TextGenerateEffect } from '../ui/text-generate-effect';
+import { TypewriterEffectSmooth } from '../ui/typewriter-effect';
 import { Tooltip, TooltipContent, TooltipTrigger } from '../ui/tooltip';
+import { Vortex } from '../ui/vortex';
 
 const buttonIcons = {
   CV: CV,
@@ -53,25 +56,20 @@ export default function Hero() {
 
   return (
     <section className="relative min-h-[600px] md:min-h-[700px] overflow-hidden">
-      {/* Background GIF Layer - High-Resolution */}
-      <div className="absolute inset-0 z-0 w-full h-full">
-        <Image
-          src={avatarGlow}
-          alt="hero background"
-          fill
-          className="object-cover object-center brightness-[0.4] scale-110"
-          unoptimized
-          priority
-          quality={100}
-          sizes="100vw"
+      {/* Vortex Background Layer */}
+      <div className="absolute inset-0 z-0">
+        <Vortex
+          backgroundColor="transparent"
+          rangeY={800}
+          particleCount={500}
+          baseHue={220}
+          className="w-full h-full"
+          containerClassName="w-full h-full"
         />
       </div>
 
-      {/* Dark Overlay for Professional Look & Text Readability */}
-      <div className="absolute inset-0 z-10 bg-gradient-to-b from-black/60 via-black/40 to-background/90" />
-
       {/* Content Layer */}
-      <Container className="relative z-20 mx-auto max-w-5xl py-16 md:py-20">
+      <Container className="relative z-10 mx-auto max-w-5xl py-16 md:py-20">
         {/* Logo/Avatar with 3D Flip Effect */}
         <div className="group perspective-1000 size-32">
           <div className="relative w-full h-full transition-transform duration-700 transform-style-3d group-hover:rotate-y-180">
@@ -85,7 +83,7 @@ export default function Hero() {
                 className="size-32 bg-blue-300 dark:bg-yellow-300 ring-4 ring-white/20 shadow-2xl"
               />
             </div>
-            
+
             {/* Back Side - GIF */}
             <div className="absolute inset-0 backface-hidden rotate-y-180">
               <Image
@@ -102,13 +100,61 @@ export default function Hero() {
 
         {/* Text Area */}
         <div className="mt-8 flex flex-col gap-2">
-          <h1 className="text-3xl md:text-4xl font-serif font-bold text-white drop-shadow-lg">
-            Hii, I am {name} — <span className="text-gray-200">{title}</span>
-          </h1>
+          <TypewriterEffectSmooth
+            words={[
+              { text: "Hii," },
+              { text: "I" },
+              { text: "am" },
+              { text: "Darshan", className: "text-blue-400 dark:text-blue-400" },
+              { text: "Mistari", className: "text-blue-400 dark:text-blue-400" },
+              { text: "—" },
+              { text: "ML", className: "text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400" },
+              { text: "&", className: "text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400" },
+              { text: "Robotics", className: "text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400" },
+              { text: "Developer", className: "text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400" },
+            ]}
+            className="text-white drop-shadow-lg font-orbitron"
+            cursorClassName="bg-blue-400"
+          />
 
-          <div className="mt-4 flex flex-wrap items-center gap-x-1.5 gap-y-2 text-sm md:text-base whitespace-pre-wrap text-gray-100 drop-shadow-md">
-            {renderDescription()}
-          </div>
+          <TextGenerateEffect
+            segments={[
+              { type: 'text', content: 'Machine Learning & Deep Learning Engineer specializing in Computer Vision, Natural Language Processing, and AI System Architecture. Building intelligent, production-ready solutions with' },
+              {
+                type: 'component',
+                content: (
+                  <Skill name="PyTorch" href="https://pytorch.org/">
+                    <Image src="/skills/pytorch.svg" alt="PyTorch" width={20} height={20} />
+                  </Skill>
+                ),
+                key: 'pytorch'
+              },
+              { type: 'text', content: ',' },
+              {
+                type: 'component',
+                content: (
+                  <Skill name="TensorFlow" href="https://www.tensorflow.org/">
+                    <Image src="/skills/tensorflow.svg" alt="TensorFlow" width={20} height={20} />
+                  </Skill>
+                ),
+                key: 'tensorflow'
+              },
+              { type: 'text', content: ', and' },
+              {
+                type: 'component',
+                content: (
+                  <Skill name="Hugging Face" href="https://huggingface.co/">
+                    <Image src="/skills/huggingface.svg" alt="Hugging Face" width={20} height={20} />
+                  </Skill>
+                ),
+                key: 'huggingface'
+              },
+              { type: 'text', content: '. Expertise in model optimization, real-time inference pipelines, and scalable ML deployment.' },
+            ]}
+            className="text-gray-100 drop-shadow-md"
+            duration={0.5}
+            filter={true}
+          />
         </div>
 
         {/* Buttons */}
@@ -152,6 +198,6 @@ export default function Hero() {
           ))}
         </div>
       </Container>
-    </section>
+    </section >
   );
 }

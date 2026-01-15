@@ -62,11 +62,10 @@ export default function CategorizedSkills() {
             <button
               key={category}
               onClick={() => setActiveCategory(category)}
-              className={`text-xs px-3 py-1.5 rounded-full border transition-all duration-300 ${
-                activeCategory === category
+              className={`text-xs px-3 py-1.5 rounded-full border transition-all duration-300 ${activeCategory === category
                   ? 'bg-primary text-primary-foreground border-primary'
-                  : 'bg-zinc-950/15 backdrop-blur-md border-white/15 hover:bg-zinc-950/30 hover:border-white/30'
-              }`}
+                  : 'bg-theme-subtle border-theme hover:bg-gray-100 dark:hover:bg-zinc-950/30 border-theme-hover'
+                }`}
             >
               {category}
             </button>
@@ -79,7 +78,7 @@ export default function CategorizedSkills() {
             return (
               <div
                 key={index}
-                className="flex items-center gap-2.5 px-4 py-2.5 rounded-lg bg-zinc-950/15 backdrop-blur-md border border-white/15 hover:bg-zinc-950/30 hover:border-white/30 transition-all duration-300"
+                className="flex items-center gap-2.5 px-4 py-2.5 rounded-lg bg-theme-subtle border border-theme hover:bg-gray-100 dark:hover:bg-zinc-950/30 border-theme-hover transition-all duration-300"
               >
                 <Image
                   src={skill.iconPath}

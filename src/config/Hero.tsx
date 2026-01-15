@@ -49,7 +49,7 @@ export const heroConfig = {
   // Personal Information
   name: 'Darshan',
   title: 'ML & Robotics Developer',
-  avatar: '/assets/logo.png',
+  avatar: '/assets/profile.png',
 
   // Skills Configuration
   skills: [
@@ -106,23 +106,23 @@ export const heroConfig = {
 // Social Links Configuration
 export const socialLinks = [
   {
-    name: 'X',
-    href: 'https://x.com/ramxcodes',
+    name: 'Medium',
+    href: 'https://medium.com/@darshanmistaridz',
     icon: <X />,
   },
   {
     name: 'LinkedIn',
-    href: 'https://www.linkedin.com/in/ramxcodes/',
+    href: 'https://www.linkedin.com/in/darshanxdevs/',
     icon: <LinkedIn />,
   },
   {
     name: 'Github',
-    href: 'https://github.com/ramxcodes',
+    href: 'https://github.com/darshanxdevs',
     icon: <Github />,
   },
   {
     name: 'Email',
-    href: 'mailto:ramxcodes@gmail.com',
+    href: 'mailto:darshanmistaridz@gmail.com',
     icon: <Mail />,
   },
 ];

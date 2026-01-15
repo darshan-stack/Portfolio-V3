@@ -2,71 +2,65 @@
 
 import { useEffect, useState } from 'react';
 
-interface SpotifyData {
-  track_id: string;
-  timestamps: {
-    start: number;
-    end: number;
-  };
-  song: string;
+interface SpotifyTrack {
+  name: string;
   artist: string;
   album: string;
-  album_art_url: string;
+  albumArt: string;
+  url: string;
+  isPlaying: boolean;
 }
 
-interface LanyardData {
-  spotify: SpotifyData | null;
-  discord_status: 'online' | 'idle' | 'dnd' | 'offline';
-  activities: any[];
-}
-
-interface LanyardResponse {
-  success: boolean;
-  data: LanyardData;
-}
-
-export function useSpotify(discordId: string) {
-  const [spotify, setSpotify] = useState<SpotifyData | null>(null);
-  const [isPlaying, setIsPlaying] = useState(false);
+export function useSpotify() {
+  const [track, setTrack] = useState<SpotifyTrack | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (!discordId) {
-      setLoading(false);
-      return;
-    }
-
-    const fetchSpotifyData = async () => {
+    const fetchNowPlaying = async () => {
       try {
-        console.log('Fetching Spotify data for Discord ID:', discordId);
-        const response = await fetch(`https://api.lanyard.rest/v1/users/${discordId}`);
-        const data: LanyardResponse = await response.json();
-        
-        console.log('Lanyard API Response:', data);
+        const response = await fetch('/api/spotify/now-playing');
 
-        if (data.success && data.data.spotify) {
-          console.log('Spotify data found:', data.data.spotify);
-          setSpotify(data.data.spotify);
-          setIsPlaying(true);
-        } else {
-          console.log('No Spotify data in response');
-          setIsPlaying(false);
+        if (response.status === 204 || !response.ok) {
+          setTrack(null);
+          setLoading(false);
+          return;
         }
+
+        const data = await response.json();
+
+        if (data.isPlaying) {
+          setTrack({
+            name: data.title,
+            artist: data.artist,
+            album: data.album,
+            albumArt: data.albumImageUrl,
+            url: data.songUrl,
+            isPlaying: true,
+          });
+        } else {
+          setTrack(null);
+        }
+
         setLoading(false);
       } catch (error) {
         console.error('Error fetching Spotify data:', error);
+        setTrack(null);
         setLoading(false);
       }
     };
 
     // Initial fetch
-    fetchSpotifyData();
+    fetchNowPlaying();
 
     // Poll every 30 seconds
-    const interval = setInterval(fetchSpotifyData, 30000);
+    const interval = setInterval(fetchNowPlaying, 30000);
 
     return () => clearInterval(interval);
-  }, [discordId]);
+  }, []);
 
-  return { spotify, isPlaying, loading };
+  return {
+    track,
+    isPlaying: track?.isPlaying || false,
+    loading
+  };
 }
